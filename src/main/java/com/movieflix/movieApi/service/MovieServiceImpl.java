@@ -84,20 +84,23 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDto updateMovie(Integer movieId, MovieDto movieDto, MultipartFile file) throws IOException {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Movie not found"));
+        Movie mv = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Movie not found"));
 
-        String fileName = movie.getPoster();
-        if (fileName != null) {
+        String fileName = mv.getPoster();
+        if (file != null && !file.isEmpty()) {
             Files.deleteIfExists(Paths.get(path + File.separator + fileName));
             fileName = fileService.uploadFile(path, file);
         }
 
-        movieDto.setPoster(fileName);
+        mv.setTitle(movieDto.getTitle());
+        mv.setDirector(movieDto.getDirector());
+        mv.setStudio(movieDto.getStudio());
+        mv.setMovieCast(movieDto.getMovieCast());
+        mv.setReleaseYear(movieDto.getReleaseYear());
+        mv.setPoster(fileName);
 
-        Movie newMovie = new Movie(movieDto.getMovieId(), movieDto.getTitle(), movieDto.getDirector(), movieDto.getStudio(), movieDto.getMovieCast(), movieDto.getReleaseYear(), movieDto.getPoster(), 0);
-
-        Movie updatedMovie = movieRepository.save(newMovie);
-        String posterUrl = baseUrl + "/file/" + movie.getPoster();
+        Movie updatedMovie = movieRepository.save(mv);
+        String posterUrl = baseUrl + "/file/" + fileName;
 
         MovieDto response = new MovieDto(updatedMovie.getMovieId(), updatedMovie.getTitle(), updatedMovie.getDirector(), updatedMovie.getStudio(), updatedMovie.getMovieCast(), updatedMovie.getReleaseYear(), updatedMovie.getPoster(), posterUrl);
         return response;
