@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadFile(String path, MultipartFile file) throws IOException {
@@ -19,12 +19,11 @@ public class FileServiceImpl implements FileService{
 
         //tao file object
         File f = new File(path);
-        if(!f.exists()) {
+        if (!f.exists()) {
             f.mkdir();
         }
 
         Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-
         return fileName;
     }
 

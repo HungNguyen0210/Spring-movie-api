@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Movie {
 
     @Id
@@ -42,4 +44,7 @@ public class Movie {
     @Column(nullable = false)
     @NotBlank(message = "Please provide movie's poster")
     private String poster;
+
+    @Version  // Hibernate sẽ kiểm soát phiên bản dữ liệu
+    private Integer version;
 }
