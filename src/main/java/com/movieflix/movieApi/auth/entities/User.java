@@ -39,6 +39,7 @@ public class User implements UserDetails {
     @Size(min = 5, message = "The password must have at least 5 character")
     private String password;
 
+    @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 
     @Enumerated(EnumType.STRING)
